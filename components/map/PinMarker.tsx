@@ -73,11 +73,9 @@ const getIconConfig = (status: string, isOwn: boolean) => {
 const createStatusIcon = (status: string, nickname: string, isOwn: boolean) => {
   const { color, svg } = getIconConfig(status, isOwn);
 
-  // Extract emoji from status
-  const emoji =
-    status.match(
-      /[\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]/u,
-    )?.[0] || "💕";
+  // Extract emoji from status - use simple approach to avoid regex unicode flag
+  const emojiMatch = status.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]/);
+  const emoji = emojiMatch ? emojiMatch[0] : "💕";
 
   return L.divIcon({
     className: "custom-marker",

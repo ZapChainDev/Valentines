@@ -76,8 +76,8 @@ export function LoginScreen() {
 
           <p className="text-gray-600 max-w-lg mx-auto">
             Connect hearts across the globe. Drop your pin, share your song, and
-            find love on the map. Join thousands spreading love this Valentine&apos;s
-            season.
+            find love on the map. Join thousands spreading love this
+            Valentine&apos;s season.
           </p>
         </div>
 
