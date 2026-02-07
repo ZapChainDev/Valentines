@@ -130,11 +130,14 @@ export function ChatDialog({ open, onOpenChange, otherUser }: ChatDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md h-[600px] max-h-[80vh] flex flex-col p-0 border-rose-200">
+      <DialogContent className="w-full max-w-[95vw] sm:max-w-md h-[85vh] sm:h-[600px] max-h-[85vh] sm:max-h-[80vh] flex flex-col p-0 border-rose-200">
         {/* Header */}
-        <DialogHeader className="p-4 border-b bg-gradient-to-r from-rose-50 to-pink-50">
-          <DialogTitle className="flex items-center gap-3">
-            <Avatar fallback={otherUser.nickname} className="h-10 w-10" />
+        <DialogHeader className="p-3 sm:p-4 border-b bg-gradient-to-r from-rose-50 to-pink-50">
+          <DialogTitle className="flex items-center gap-2 sm:gap-3">
+            <Avatar
+              fallback={otherUser.nickname}
+              className="h-8 w-8 sm:h-10 sm:w-10"
+            />
             <div>
               <span className="text-rose-700">{otherUser.nickname}</span>
               <p className="text-xs font-normal text-muted-foreground">
@@ -145,7 +148,7 @@ export function ChatDialog({ open, onOpenChange, otherUser }: ChatDialogProps) {
         </DialogHeader>
 
         {/* Messages */}
-        <ScrollArea className="flex-1 p-4 chat-messages">
+        <ScrollArea className="flex-1 p-3 sm:p-4 chat-messages">
           {loading ? (
             <div className="flex items-center justify-center h-full">
               <Loader2 className="h-6 w-6 animate-spin text-rose-400" />
@@ -296,7 +299,7 @@ export function ChatDialog({ open, onOpenChange, otherUser }: ChatDialogProps) {
         {chatStatus === "accepted" && (
           <form
             onSubmit={handleSend}
-            className="p-4 border-t bg-white flex gap-2"
+            className="p-3 sm:p-4 border-t bg-white flex gap-2"
           >
             <Input
               value={message}

@@ -8,9 +8,9 @@ service cloud.firestore {
       allow update, delete: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Pins collection
+    // Pins collection - allow public count/list for landing page stats
     match /pins/{pinId} {
-      allow read: if request.auth != null;
+      allow read: if true; // Public read for landing page stats
       allow create: if request.auth != null;
       allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
     }

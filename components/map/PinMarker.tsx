@@ -74,34 +74,62 @@ const createStatusIcon = (status: string, nickname: string, isOwn: boolean) => {
   const { color, svg } = getIconConfig(status, isOwn);
 
   // Extract emoji from status - use simple approach to avoid regex unicode flag
-  const emojiMatch = status.match(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]/);
+  const emojiMatch = status.match(
+    /[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]/,
+  );
   const emoji = emojiMatch ? emojiMatch[0] : "💕";
+
+  const ownStyle = isOwn ? "animation: pulse 2s infinite;" : "";
+  const glowEffect = isOwn ? `box-shadow: 0 0 20px ${color}40;` : "";
 
   return L.divIcon({
     className: "custom-marker",
     html: `
-      <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
-        <div class="heart-marker" style="color: ${color}; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); width: 32px; height: 32px;">
+      <style>
+        @keyframes pulse {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.1); }
+        }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+        .heart-marker-container {
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+        .heart-marker-container:hover {
+          transform: scale(1.15) !important;
+        }
+        .heart-marker-container:hover .marker-label {
+          background: ${color} !important;
+          color: white !important;
+        }
+      </style>
+      <div class="heart-marker-container" style="display: flex; flex-direction: column; align-items: center; gap: 2px; ${ownStyle}">
+        <div class="heart-marker" style="color: ${color}; filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); width: 36px; height: 36px; transition: all 0.3s ease;">
           ${svg}
         </div>
-        <div style="
+        <div class="marker-label" style="
           background: white;
-          padding: 2px 6px;
-          border-radius: 4px;
+          padding: 3px 8px;
+          border-radius: 6px;
           font-size: 11px;
           font-weight: 600;
           color: ${color};
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
           white-space: nowrap;
-          border: 1px solid ${color};
+          border: 2px solid ${color};
+          transition: all 0.3s ease;
+          ${glowEffect}
         ">
           ${emoji} ${nickname}
         </div>
       </div>
     `,
-    iconSize: [120, 60],
-    iconAnchor: [60, 60],
-    popupAnchor: [0, -60],
+    iconSize: [120, 70],
+    iconAnchor: [60, 70],
+    popupAnchor: [0, -70],
   });
 };
 
@@ -117,14 +145,14 @@ export function PinMarker({ pin, isOwn, onClick }: PinMarkerProps) {
       }}
     >
       <Popup>
-        <div className="text-center p-1">
-          <p className="font-semibold text-rose-600">{pin.nickname}</p>
-          <p className="text-sm text-gray-600 mt-1">{pin.status}</p>
+        <div className="text-center p-2 min-w-[150px]">
+          <p className="font-bold text-rose-600 text-base">{pin.nickname}</p>
+          <p className="text-sm text-gray-600 mt-1 mb-2">{pin.status}</p>
           <button
             onClick={onClick}
-            className="mt-2 text-xs text-pink-500 hover:text-pink-600 underline"
+            className="bg-gradient-to-r from-rose-500 to-pink-500 text-white px-4 py-1.5 rounded-full text-xs font-medium hover:from-rose-600 hover:to-pink-600 transition-all shadow-md"
           >
-            View details
+            💕 View Profile
           </button>
         </div>
       </Popup>

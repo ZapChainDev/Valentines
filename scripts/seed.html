@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Seed Dummy Data - HeartMap</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 100%);
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #e91e63;
+        text-align: center;
+      }
+      button {
+        background: linear-gradient(135deg, #f06292 0%, #ec407a 100%);
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        margin-top: 20px;
+      }
+      button:hover {
+        background: linear-gradient(135deg, #ec407a 0%, #e91e63 100%);
+      }
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      #status {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 5px;
+        display: none;
+      }
+      .success {
+        background: #c8e6c9;
+        color: #2e7d32;
+      }
+      .error {
+        background: #ffcdd2;
+        color: #c62828;
+      }
+      .info {
+        background: #fff9c4;
+        color: #f57f17;
+      }
+      .log {
+        margin-top: 10px;
+        padding: 10px;
+        background: #f5f5f5;
+        border-radius: 5px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .log-item {
+        padding: 5px 0;
+        border-bottom: 1px solid #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🗺️ HeartMap - Seed Dummy Data</h1>
+      <p style="text-align: center; color: #666">
+        This will create 10 dummy accounts in the Catbalogan area with pins,
+        love songs, and statuses.
+      </p>
+
+      <button id="seedBtn" onclick="seedData()">🚀 Start Seeding Data</button>
+
+      <div id="status"></div>
+      <div id="log" class="log" style="display: none"></div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        setDoc,
+        doc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyD71nRwAU8CJUuGev1GV9w3KrYyE-YIFaE",
+        authDomain: "valentines-ae013.firebaseapp.com",
+        projectId: "valentines-ae013",
+        storageBucket: "valentines-ae013.firebasestorage.app",
+        messagingSenderId: "698116779953",
+        appId: "1:698116779953:web:9995edbc246aeccaee5790",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      const CATBALOGAN_BASE = { lat: 11.7756, lng: 124.6906 };
+
+      const dummyAccounts = [
+        {
+          nickname: "Maria ❤️",
+          status: "💕 In love",
+          youtubeId: "kJQP7kiw5Fk",
+        },
+        { nickname: "Juan 💑", status: "💍 Engaged", youtubeId: "RgKAFK5djSk" },
+        {
+          nickname: "Sofia 🌹",
+          status: "💖 Happily taken",
+          youtubeId: "450p7goxZqg",
+        },
+        {
+          nickname: "Carlos 💘",
+          status: "💑 In a relationship",
+          youtubeId: "nfWlot6h_JM",
+        },
+        { nickname: "Ana 💝", status: "❤️ Married", youtubeId: "lp-EO5I60KA" },
+        {
+          nickname: "Miguel 🎵",
+          status: "💜 Forever yours",
+          youtubeId: "SlPhMPnQ58k",
+        },
+        {
+          nickname: "Isabella 💗",
+          status: "💓 Single",
+          youtubeId: "OPf0YbXqDm0",
+        },
+        {
+          nickname: "Diego 🌺",
+          status: "🔍 Looking for love",
+          youtubeId: "e-ORhEE9VVg",
+        },
+        {
+          nickname: "Carmen 🦋",
+          status: "💕 In love",
+          youtubeId: "fRh_vgS2dFE",
+        },
+        {
+          nickname: "Rafael 🌟",
+          status: "💫 Love is in the air",
+          youtubeId: "JGwWNGJdvx8",
+        },
+      ];
+
+      function randomOffset() {
+        const offset = 0.045;
+        return (Math.random() - 0.5) * offset;
+      }
+
+      function addLog(message, isError = false) {
+        const logDiv = document.getElementById("log");
+        logDiv.style.display = "block";
+        const logItem = document.createElement("div");
+        logItem.className = "log-item";
+        logItem.style.color = isError ? "#c62828" : "#333";
+        logItem.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+        logDiv.appendChild(logItem);
+        logDiv.scrollTop = logDiv.scrollHeight;
+      }
+
+      window.seedData = async function () {
+        const btn = document.getElementById("seedBtn");
+        const status = document.getElementById("status");
+
+        btn.disabled = true;
+        status.className = "info";
+        status.style.display = "block";
+        status.textContent = "⏳ Starting to seed data...";
+
+        addLog("Starting seeding process...");
+
+        try {
+          for (let i = 0; i < dummyAccounts.length; i++) {
+            const account = dummyAccounts[i];
+            const userId = `dummy_user_${i + 1}`;
+
+            addLog(`Creating user: ${account.nickname}`);
+
+            // Create user document
+            await setDoc(doc(db, "users", userId), {
+              userId,
+              nickname: account.nickname,
+              createdAt: serverTimestamp(),
+            });
+
+            addLog(`✓ User created: ${account.nickname}`);
+
+            // Create pin document
+            await addDoc(collection(db, "pins"), {
+              userId,
+              nickname: account.nickname,
+              status: account.status,
+              youtubeId: account.youtubeId,
+              lat: CATBALOGAN_BASE.lat + randomOffset(),
+              lng: CATBALOGAN_BASE.lng + randomOffset(),
+              createdAt: serverTimestamp(),
+            });
+
+            addLog(`✓ Pin created for: ${account.nickname}`);
+          }
+
+          status.className = "success";
+          status.textContent =
+            "🎉 Successfully created 10 dummy accounts! Check your map in Catbalogan area.";
+          addLog("✓✓✓ ALL DONE! 10 accounts created successfully.");
+        } catch (error) {
+          status.className = "error";
+          status.textContent = `❌ Error: ${error.message}`;
+          addLog(`ERROR: ${error.message}`, true);
+          btn.disabled = false;
+        }
+      };
+    </script>
+  </body>
+</html>
