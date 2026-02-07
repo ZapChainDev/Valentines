@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useChatRequests } from "@/hooks/use-chat-requests";
 import { ChatRequestsDialog } from "@/components/chat/ChatRequestsDialog";
+import { HelpButton } from "@/components/HelpButton";
 import { Heart, LogOut, MessageCircle } from "lucide-react";
 
 export function Header() {
@@ -35,6 +36,9 @@ export function Header() {
         <div className="flex items-center gap-3">
           {user && (
             <>
+              {/* Help Button */}
+              <HelpButton />
+
               {/* Chat Requests Button */}
               <Button
                 variant="ghost"

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { FloatingTip } from "@/components/FloatingTip";
 import { Heart, Plus, Sparkles } from "lucide-react";
 
 interface AddPinButtonProps {
@@ -20,6 +21,15 @@ export function AddPinButton({ onClick, disabled }: AddPinButtonProps) {
           <div className="absolute w-20 h-20 rounded-full border-2 border-rose-300 animate-ping opacity-30" />
           <div className="absolute w-24 h-24 rounded-full border border-pink-200 animate-pulse opacity-20" />
         </div>
+
+        {/* Floating Tip */}
+        {!disabled && (
+          <FloatingTip
+            targetId="add-pin-button"
+            message="🎯 Click here to share your love story with the world!"
+            delay={3000}
+          />
+        )}
 
         <Button
           variant="valentine"

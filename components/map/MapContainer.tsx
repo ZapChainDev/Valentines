@@ -16,6 +16,7 @@ import { PinMarker } from "./PinMarker";
 import { PinDetailCard } from "./PinDetailCard";
 import { AddPinButton } from "./AddPinButton";
 import { AddPinDialog } from "./AddPinDialog";
+import { EmptyStateHint } from "./EmptyStateHint";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { MapPin, Navigation, Minus, Plus, Layers, Heart } from "lucide-react";
 import type { Pin } from "@/types";
@@ -301,6 +302,9 @@ export default function MapContainer() {
           <span>Loading love pins...</span>
         </div>
       )}
+
+      {/* Empty State Hint */}
+      <EmptyStateHint hasUserPin={userHasPin} totalPins={pins.length} />
 
       {/* Add Pin Button */}
       {!userHasPin && (

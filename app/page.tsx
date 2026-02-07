@@ -5,6 +5,7 @@ import { LoginScreen } from "@/components/auth/LoginScreen";
 import { MapView } from "@/components/map/MapView";
 import { Header } from "@/components/Header";
 import { ChatHeads } from "@/components/chat/ChatHeads";
+import { Onboarding } from "@/components/Onboarding";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
         <MapView />
         <ChatHeads />
       </div>
+      <Onboarding userId={user.userId} />
     </div>
   );
 }
