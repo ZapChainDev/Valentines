@@ -16,6 +16,7 @@ export function usePinsCount() {
 
     const fetchCount = async () => {
       try {
+        if (!db) return;
         const pinsRef = collection(db, "pins");
         const snapshot = await getCountFromServer(pinsRef);
         setCount(snapshot.data().count);
